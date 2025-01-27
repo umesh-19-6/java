@@ -1,0 +1,181 @@
+1. Import, Configure application.properties, Force update
+
+2. Create package in src/main/java :: com.example.projectName.controller
+
+3. Create a class in com.example.projectName.controller :: Controller.java
+
+4. Create package in src/main/java :: com.example.projectName.pojo
+
+5. Create a class in com.example.projectName.pojo :: TableName.java (this will be entity class)
+
+6. Go to TableName.java :: 
+		
+		@Entity
+		@Table
+		public class TableName{
+			
+			@id
+			@GenerateValue(strategy = GenerationType.IDENTITY);
+			private long id;
+
+			@Column(nullable = false)
+			private String name;
+		}
+
+7. Create package in src/main/java :: com.example.projectName.enumOne
+
+8. Create a enum in com.example.projectName.enumOne :: ProjectNameEnum.java
+
+9. Go to ProjectNameEnum.java
+
+		public enum ProjectNameEnum{
+			FIRST, SECOND, THIRD
+		}
+
+10. Go to TableName.java (Entity class)
+		
+		after all column list:: @Enumerated(EnumType.STRING)
+					private ProjectNameEnum ProjectNameVar1;
+					//import ProjectNameEnum
+
+11. Create a new package in src/main/java :: com.example.projectName.services
+
+12. Create a class in com.example.projectName.services :: ProjectNameServices.java
+
+13. Create an interface in com.example.projectName.services :: ProjectNameServicesInterface.java
+
+14. Go to ProjectNameServicesInterface.java
+
+		public interface ProjectNameServicesInterface {
+		List<TableName> getValue();
+		TableName insertValue();
+	} // import list and TableName
+
+15. Go to ProjectNameServices.java class :: add implements ProjectNameServicesInterface :: quick fix and add unimplemented methods
+
+16. in insertValue method add param :: public TableName insertValue(TableName value) {
+
+17. Go to ProjectNameServicesInterface.java :: add param :: TableName inserValue (TableName value);
+
+18. Create package in src/main/java :: com.example.projectName.dao
+
+19. Create Interface in com.example.projectName.dao :: DaoProjectNameInterface.java
+
+20. Go to DaoProjectNameInterface.java :: public interface DaoProjectNameInterface extends JpaRepository<EmployeeTable, Long> {
+
+21. Go to ProjectNameServices.java Class :: above all methods
+
+				public class ProjectNameServices implements ProjectNameServicesInterface{
+				
+				@Autowired
+				private DaoProjectNameInterface daoMethod;
+				//import
+
+22. in ProjectNameServices.java class :: Write logic of insert method
+
+				public TableName insertValue(TableName value){
+				daoMethod.save(value);
+				return "value inserted";
+			}
+
+23. Go to ProjectNameServicesInterface :: change the type of insertValue method :: String insertValue
+
+24. Go to ProjectNameServices class :: change return type of insertValue :: String
+
+25. Go to Controller.java ::
+
+		@RestController
+		@RequestMapping("/")
+		public class Controller { }
+
+26. 		@RestController
+		@RequestMapping("/")
+		public class Controller {
+	
+		@PostMapping("insert")
+		public ResponseEntity<?> insertValue(@RequestBody TableName t) {
+		//TODO: process POST request
+		
+		return entity;
+		}
+	}
+
+27. 		@RestController
+		@RequestMapping("/")
+		public class Controller {
+	
+		@Autowired
+		private ProjectNameServicesInterface officevar2;
+	
+		@PostMapping("insert")
+		public ResponseEntity<?> insertValue(@RequestBody TableName t) {
+		//TODO: process POST request
+		String result = officevar2.insertValue(t);
+		return ResponseEntity.ok(result);
+		}
+	
+
+	}	
+
+
+28. Go to ProjectNameServices.java class :: add 2 annotations
+
+		@Service
+		@Transactional
+		public class OfficeServices implements OfficeServicesInterface{
+
+29. Go to TableName (entity class) :: Generate Constructor using field (Check all fields) :: Getter Setter (check all) :: Constructor from super class
+
+30. Go to ProjectNameServices.java class :: 
+
+
+			@Override
+	public List<EmployeeTable> getValue() {
+		// TODO Auto-generated method stub
+		List <EmployeeTable> result = daoMethod.findAll();
+		return result;
+	}
+
+
+31. Go to Controller.java :: at the end add a method ::
+
+
+		@GetMapping("getAll")
+	public ResponseEntity<?> getValue() {
+		List<EmployeeTable> res = officevar2.getValue();
+		return ResponseEntity.ok(res);
+	}
+	
+32. Run and check on Postman :: new HTTP URL: localhost: 8081/insert Body raw json :: {"id":null, "name": "ll", "salary": 23.00}
+
+33. Go to ProjectNameServicesInterface :: add method :: 	String updateValue(TableName updatedValue);
+
+34. Go to ProjectNameServices.java class :: add unimplemented methods
+
+
+		
+	@Override
+	public String updateValue(EmployeeTable updatedValue) {
+		// TODO Auto-generated method stub
+		daoMethod.save(updatedValue);
+		return "value updated";
+	}
+
+35. Go to Controller :: add method
+
+		
+	@PostMapping("update")
+	public ResponseEntity<?> updateValue(@RequestBody TableName t) {
+		//TODO: process POST request
+		
+		String result = schoolVar2.updateValue(t);
+		
+		return ResponseEntity.ok(result);
+	}
+
+
+
+	
+		
+
+
